@@ -1,0 +1,9 @@
+assets/
+.DS_Store
+node_modules/
+.env
+.ruby-version
+.node-version
+.nvmrc
+.idea
+

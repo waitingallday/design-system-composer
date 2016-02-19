@@ -1,0 +1,20 @@
+doctype html
+html.no-js lang="en"
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    title Hello
+    link rel="apple-touch-icon-precomposed" href="/favicon-152.png"
+
+    /[if lt IE 9]
+      script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"
+
+    link rel="stylesheet" href="//d2h9b02ioca40d.cloudfront.net/v3.8/uom.css"
+    script src="//d2h9b02ioca40d.cloudfront.net/v3.8/uom.js"
+
+  body
+    .uomcontent
+      .page-inner
+        == yield
+        == render(:_nav)
