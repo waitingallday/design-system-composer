@@ -3,7 +3,6 @@
     h2 Web.Unimelb
     ul
       - opts[:navigation].each do |nav_item|
-        - next if nav_item[:hidden]
         li
           a href=(nav_item[:href])
             == nav_item[:title]

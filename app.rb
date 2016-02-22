@@ -86,10 +86,10 @@ class App < Roda
     build_pages_navigation
 
     opts[:navigation] << {
-      title: 'Page Templates', href: '/layouts', children: []
+      title: 'Page Templates', href: '/layouts'
     }
     opts[:navigation] << {
-      title: 'Component reference', href: '/components', children: []
+      title: 'Component reference', href: '/components'
     }
   end
 
@@ -101,7 +101,7 @@ class App < Roda
       settings = file_settings(File.join(pages_path, p))
       path = '/' + p.gsub('.md', '').gsub('.slim', '')
       opts[:navigation] << {
-        title: settings['title'], href: path, children: []
+        title: settings['title'], href: path
       }
     end
   end
