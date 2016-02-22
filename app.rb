@@ -15,7 +15,7 @@ class App < Roda
   root = File.join(File.dirname(__FILE__))
   opts[:components_path] = File.join(root, 'assets', 'targets', 'components')
   opts[:components] = Dir.entries(opts[:components_path])
-  opts[:components].select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
+  opts[:components] = opts[:components].select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
 
   route do |r|
     build_navigation
@@ -26,7 +26,7 @@ class App < Roda
 
     r.on 'components' do
       r.on :path do |path|
-        if Dir.exist? File.join(root, 'assets', 'targets', 'components', path)
+        if Dir.exist? File.join(opts[:components_path], path)
           @title = File.basename(path).capitalize
           @component = path
           @documents = get_component(path, components: opts[:components_path])
@@ -47,7 +47,7 @@ class App < Roda
 
           r.on 'source' do
             @file = path
-            @source = slim(file_content(f)).gsub('<', '&lt;').gsub('>', '&gt;')
+            @source = convert_tags(slim(file_content(f)))
             view('layouts/source')
           end
 
@@ -57,6 +57,23 @@ class App < Roda
 
       r.is do
         view('layouts/index')
+      end
+    end
+
+    r.is :path do |path|
+      p = File.join(root, 'views', 'pages', path)
+      m = p + '.md'
+      s = p + '.slim'
+      f = p + '.slim.md'
+      if File.exist? m
+        @content = markdown(file_content(m))
+        view('page')
+      elsif File.exist? s
+        @content = slim(file_content(s))
+        view('page')
+      elsif File.exist? f
+        @content = markdown(slim(file_content(f)))
+        view('page')
       end
     end
   end

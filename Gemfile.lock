@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dotenv (2.1.0)
     front_matter_parser (0.0.4)
     rack (1.6.4)
     redcarpet (3.3.4)
@@ -16,9 +17,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv (~> 2.1.0)
   front_matter_parser (~> 0.0.2)
   redcarpet (~> 3.3.4)
-  roda
+  roda (~> 2.11.0)
   slim (~> 2.0.3)
 
 BUNDLED WITH

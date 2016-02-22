@@ -70,7 +70,7 @@ module RodaRenderComponent
       <li>
         <span class="accordion__title">Sample Markup</span>
         <div class="accordion__hidden"><pre><code class="html">
-' + block.gsub('<', '&lt;').gsub('>', '&gt;') + '
+' + convert_tags(block) + '
         </code></pre></div>
       </li>
     </ul></section>
@@ -91,6 +91,11 @@ module RodaRenderComponent
 
     def file_content(file)
       front_matter(file).content
+    end
+
+    def convert_tags(block = '')
+      block = yield if block_given?
+      block.gsub('<', '&lt;').gsub('>', '&gt;')
     end
   end
 end
