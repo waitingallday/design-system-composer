@@ -14,14 +14,15 @@ module RodaRenderComponent
       raw_documents.flatten.sort.map do |f|
         section = File.basename(f)[0..1]
         @documents[section] = [] unless @documents[section]
-        @documents[section] << case File.extname(f)
-                               when '.md' then
-                                 build_markdown(f) unless opts.include? :code_only
-                               when '.slim' then
-                                 build_slim(f)
-                               else
-                                 build_html(f)
-                               end
+        @documents[section] <<
+          case File.extname(f)
+          when '.md' then
+            build_markdown(f) unless opts.include? :code_only
+          when '.slim' then
+            build_slim(f)
+          else
+            build_html(f)
+          end
       end
 
       @documents
@@ -29,8 +30,8 @@ module RodaRenderComponent
 
     private
 
-    def slim(content)
-      Slim::Template.new(pretty: true) { content }.render
+    def slim(content, scope=self)
+      Slim::Template.new(pretty: true) { content }.render(scope)
     end
 
     def markdown(content)

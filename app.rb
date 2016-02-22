@@ -14,7 +14,8 @@ class App < Roda
 
   root = File.join(File.dirname(__FILE__))
   opts[:components_path] = File.join(root, 'assets', 'targets', 'components')
-  opts[:components] = Dir.entries(opts[:components_path]).select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
+  opts[:components] = Dir.entries(opts[:components_path])
+  opts[:components].select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
 
   route do |r|
     build_navigation
@@ -40,8 +41,16 @@ class App < Roda
 
     r.on 'layouts' do
       r.on :path do |path|
-        if File.exist? File.join(root, 'views', 'layouts', path + '.slim')
+        f = File.join(root, 'views', 'layouts', path + '.slim')
+        if File.exist? f
           @layout = true
+
+          r.on 'source' do
+            @file = path
+            @source = slim(file_content(f)).gsub('<', '&lt;').gsub('>', '&gt;')
+            view('layouts/source')
+          end
+
           view('layouts/' + path)
         end
       end
