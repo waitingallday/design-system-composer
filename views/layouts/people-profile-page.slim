@@ -1,4 +1,4 @@
-== slim :breadcrumb
+== render(:_breadcrumb)
 
 div role="main"
   header
@@ -11,10 +11,10 @@ div role="main"
             span Go
             svg class="icon" role="img"
               use xlink:href="#icon-search"
-  
+
   .profile-header
     .profile-header__summary
-      img.profile-header__photo src="/assets/images/chaz.jpg" alt="" width="150" height="150"
+      img.profile-header__photo src="/assets/example/chaz.jpg" alt="" width="150" height="150"
       h1 Chaz Batrouney
       p: em Web Producer
       p Project Services
@@ -45,7 +45,7 @@ div role="main"
         li
           em> Campus:
           | Parkville
-  
+
   section
     h2 Supervisor
     ol.search-results
@@ -130,5 +130,5 @@ div role="main"
           .person__contact
             p.person__phone: a href="tel:+61383440346" +61 3 8344 0346
             p.person__email: a href="mailto:chaz-batrouney@unimelb.edu.au" chaz-batrouney@unimelb.edu.au
-    
+
     p.alert-info Incorrect or missing information? Read how you can update your details.
