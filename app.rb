@@ -67,16 +67,15 @@ class App < Roda
     # Content page
     r.is :path do |path|
       basepath = File.join(opts[:root], 'views', 'pages', path)
+      @content = ''
       if File.exist? basepath + '.md'
         @content = markdown(file_content(basepath + '.md'))
-        view('page')
       elsif File.exist? basepath + '.slim'
         @content = slim(file_content(basepath + '.slim'))
-        view('page')
       elsif File.exist? basepath + '.slim.md'
         @content = markdown(slim(file_content(basepath + '.slim.md')))
-        view('page')
       end
+      view('pages/show') unless @content.empty?
     end
   end
 
@@ -93,7 +92,7 @@ class App < Roda
 
   def build_pages_navigation
     pages_path = File.join(opts[:root], 'views', 'pages')
-    pages = Dir.entries(pages_path).select { |f| f =~ /^[^\.|\_].*$/ }
+    pages = Dir.entries(pages_path).select { |f| f =~ /^[^\.|\_|show].*$/ }
     pages.each do |p|
       settings = file_settings(File.join(pages_path, p))
       path = '/' + p.gsub('.md', '').gsub('.slim', '')
