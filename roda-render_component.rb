@@ -11,6 +11,12 @@ module RodaRenderComponent
         raw_documents << Dir.glob(parent)
       end
 
+      process_component(raw_documents)
+
+      @documents
+    end
+
+    def process_component(raw_documents)
       raw_documents.flatten.sort.map do |f|
         section = File.basename(f)[0..1]
         @documents[section] = [] unless @documents[section]
@@ -24,13 +30,11 @@ module RodaRenderComponent
             build_html(f)
           end
       end
-
-      @documents
     end
 
     private
 
-    def slim(content, scope=self)
+    def slim(content, scope = self)
       Slim::Template.new(pretty: true) { content }.render(scope)
     end
 

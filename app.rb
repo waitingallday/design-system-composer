@@ -13,7 +13,9 @@ class App < Roda
   opts[:version] = ENV['VERSION']
 
   opts[:root] = File.join(File.dirname(__FILE__))
-  opts[:components_path] = File.join(opts[:root], 'assets', 'targets', 'components')
+  opts[:components_path] = File.join(
+    opts[:root], 'assets', 'targets', 'components'
+  )
   opts[:components] = Dir.entries(opts[:components_path])
   opts[:components] = opts[:components].select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
 
@@ -85,24 +87,17 @@ class App < Roda
 
     build_pages_navigation
 
-    opts[:navigation] << {
-      title: 'Page Templates', href: '/layouts'
-    }
-    opts[:navigation] << {
-      title: 'Component reference', href: '/components'
-    }
+    opts[:navigation] << { title: 'Page Templates', href: '/layouts' }
+    opts[:navigation] << { title: 'Component reference', href: '/components' }
   end
 
   def build_pages_navigation
     pages_path = File.join(opts[:root], 'views', 'pages')
-    pages = Dir.entries(pages_path)
-    pages = pages.select { |f| f =~ /^[^\.|\_].*$/ }
+    pages = Dir.entries(pages_path).select { |f| f =~ /^[^\.|\_].*$/ }
     pages.each do |p|
       settings = file_settings(File.join(pages_path, p))
       path = '/' + p.gsub('.md', '').gsub('.slim', '')
-      opts[:navigation] << {
-        title: settings['title'], href: path
-      }
+      opts[:navigation] << { title: settings['title'], href: path }
     end
   end
 end
