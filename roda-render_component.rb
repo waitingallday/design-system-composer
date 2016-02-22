@@ -4,6 +4,7 @@ module RodaRenderComponent
   module InstanceMethods
     def get_component(path, opts = {})
       @documents = {}
+
       raw_documents = []
       %w(md html slim).each do |ext|
         parent = File.join(opts[:components], path, "*.#{ext}")
@@ -12,15 +13,15 @@ module RodaRenderComponent
 
       raw_documents.flatten.sort.map do |f|
         section = File.basename(f)[0..1]
-
-        case File.extname(f)
-        when '.md' then
-          render_markdown unless opts.include? :code_only
-        when '.slim' then
-          render_slim
-        else
-          render_html
-        end
+        @documents[section] = [] unless @documents[section]
+        @documents[section] << case File.extname(f)
+                               when '.md' then
+                                 build_markdown(f) unless opts.include? :code_only
+                               when '.slim' then
+                                 build_slim(f)
+                               else
+                                 build_html(f)
+                               end
       end
 
       @documents
@@ -28,42 +29,67 @@ module RodaRenderComponent
 
     private
 
-    def render_markdown
-      @settings.merge! file_settings(f)
-      render_method = !!@settings['no_section_wrap'] ? :render_markdown : :render_markdown_with_section
-      if @documents[section]
-        @documents[section] << send(render_method, file_content(f))
-      else
-        @documents[section] = [send(render_method, file_content(f))]
-      end
+    def slim(content)
+      Slim::Template.new(pretty: true) { content }.render
     end
 
-    def render_slim
+    def markdown(content)
+      Tilt::RedcarpetTemplate.new { content }.render
+    end
+
+    def build_slim(f)
       if basename_without_index_and_extension(f)[-9..-1] == 'no-source'
         source = ''
       else
-        source = render_syntax_highlight(slim file_content(f), layout: false, pretty: true)
+        source = render_source_block(slim(file_content(f)))
       end
-      output = slim file_content(f), layout: false, pretty: true
-      if @documents[section]
-        @documents[section] << [title_from_filename(f), output, source]
-      else
-        @documents[section] = [[title_from_filename(f), output, source]]
-      end
+      output = slim(file_content(f))
+
+      [title_from_filename(f), output, source]
     end
 
-    def render_html
+    def build_html(f)
       if basename_without_index_and_extension(f)[-9..-1] == 'no-source'
         source = ''
       else
-        source = render_syntax_highlight(file_content(f))
+        source = render_source_block(file_content(f))
       end
       output = file_content(f)
-      if @documents[section]
-        @documents[section] << [title_from_filename(f), output, source]
-      else
-        @documents[section] = [[title_from_filename(f), output, source]]
+
+      [title_from_filename(f), output, source]
+    end
+
+    def build_markdown(f)
+      markdown(file_content(f))
+    end
+
+    def render_source_block(block)
+      '
+    <section class="code"><ul class="accordion">
+      <li>
+        <span class="accordion__title">Sample Markup</span>
+        <div class="accordion__hidden"><pre><code class="html">
+' + block.gsub('<', '&lt;').gsub('>', '&gt;') + '
+        </code></pre></div>
+      </li>
+    </ul></section>
+'
+    end
+
+    def front_matter(file)
+      @front_matters ||= {}
+      unless @front_matters.key? file
+        @front_matters[file] = FrontMatterParser.parse_file(file)
       end
+      @front_matters[file]
+    end
+
+    def file_settings(file)
+      front_matter(file).front_matter
+    end
+
+    def file_content(file)
+      front_matter(file).content
     end
   end
 end

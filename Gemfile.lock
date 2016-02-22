@@ -1,7 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    front_matter_parser (0.0.4)
     rack (1.6.4)
+    redcarpet (3.3.4)
     roda (2.11.0)
       rack
     slim (2.0.3)
@@ -14,6 +16,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  front_matter_parser (~> 0.0.2)
+  redcarpet (~> 3.3.4)
   roda
   slim (~> 2.0.3)
 

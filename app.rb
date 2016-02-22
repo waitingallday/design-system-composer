@@ -1,6 +1,3 @@
-require 'roda'
-require 'slim'
-
 require File.join(File.dirname(__FILE__), 'roda-helpers')
 Roda.plugin RodaHelpers
 
@@ -13,10 +10,11 @@ class App < Roda
   plugin :static, ['/assets']
   plugin :render, engine: 'slim'
 
-  opts[:version] = 'v3.8.1'
+  opts[:version] = ENV['VERSION']
 
   root = File.join(File.dirname(__FILE__))
-  opts[:components] = Dir.entries(File.join(root, 'assets', 'targets', 'components')).select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
+  opts[:components_path] = File.join(root, 'assets', 'targets', 'components')
+  opts[:components] = Dir.entries(opts[:components_path]).select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
 
   route do |r|
     build_navigation
@@ -30,7 +28,7 @@ class App < Roda
         if Dir.exist? File.join(root, 'assets', 'targets', 'components', path)
           @title = File.basename(path).capitalize
           @component = path
-          @documents = get_component(path, components: opts[:components])
+          @documents = get_component(path, components: opts[:components_path])
           view('components/show')
         end
       end

@@ -27,5 +27,18 @@ module RodaHelpers
     def blank?
       self !~ /\S/
     end
+
+    def basename_without_index_and_extension(f)
+      # Name format 00-section-title.filetype
+      File.basename(f, File.extname(f))[3..-1]
+    end
+
+    def title_from_filename(f)
+      # Delete no-source for section title display
+      title = basename_without_index_and_extension(f)
+      title = title[0..-11] if title[-9..-1] == 'no-source'
+      title = title[3..-1] if title[0..2] =~ /\d\d\-/
+      "<h2 id=\"#{title}\">#{title.gsub('-', ' ').capitalize}</h2>"
+    end
   end
 end
