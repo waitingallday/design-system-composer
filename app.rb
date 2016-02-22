@@ -24,6 +24,7 @@ class App < Roda
       view('homepage')
     end
 
+    # Component and index
     r.on 'components' do
       r.on :path do |path|
         if Dir.exist? File.join(opts[:components_path], path)
@@ -39,6 +40,7 @@ class App < Roda
       end
     end
 
+    # Complete layout, with source variant and index
     r.on 'layouts' do
       r.on :path do |path|
         f = File.join(root, 'views', 'layouts', path + '.slim')
@@ -60,19 +62,17 @@ class App < Roda
       end
     end
 
+    # Content page
     r.is :path do |path|
-      p = File.join(root, 'views', 'pages', path)
-      m = p + '.md'
-      s = p + '.slim'
-      f = p + '.slim.md'
-      if File.exist? m
-        @content = markdown(file_content(m))
+      basepath = File.join(root, 'views', 'pages', path)
+      if File.exist? basepath + '.md'
+        @content = markdown(file_content(basepath + '.md'))
         view('page')
-      elsif File.exist? s
-        @content = slim(file_content(s))
+      elsif File.exist? basepath + '.slim'
+        @content = slim(file_content(basepath + '.slim'))
         view('page')
-      elsif File.exist? f
-        @content = markdown(slim(file_content(f)))
+      elsif File.exist? basepath + '.slim.md'
+        @content = markdown(slim(file_content(basepath + '.slim.md')))
         view('page')
       end
     end
