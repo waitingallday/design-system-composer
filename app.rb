@@ -12,8 +12,8 @@ class App < Roda
 
   opts[:version] = ENV['VERSION']
 
-  root = File.join(File.dirname(__FILE__))
-  opts[:components_path] = File.join(root, 'assets', 'targets', 'components')
+  opts[:root] = File.join(File.dirname(__FILE__))
+  opts[:components_path] = File.join(opts[:root], 'assets', 'targets', 'components')
   opts[:components] = Dir.entries(opts[:components_path])
   opts[:components] = opts[:components].select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
 
@@ -43,7 +43,7 @@ class App < Roda
     # Complete layout, with source variant and index
     r.on 'layouts' do
       r.on :path do |path|
-        f = File.join(root, 'views', 'layouts', path + '.slim')
+        f = File.join(opts[:root], 'views', 'layouts', path + '.slim')
         if File.exist? f
           @layout = true
 
@@ -64,7 +64,7 @@ class App < Roda
 
     # Content page
     r.is :path do |path|
-      basepath = File.join(root, 'views', 'pages', path)
+      basepath = File.join(opts[:root], 'views', 'pages', path)
       if File.exist? basepath + '.md'
         @content = markdown(file_content(basepath + '.md'))
         view('page')
@@ -82,11 +82,27 @@ class App < Roda
 
   def build_navigation
     opts[:navigation] = []
+
+    build_pages_navigation
+
     opts[:navigation] << {
       title: 'Page Templates', href: '/layouts', children: []
     }
     opts[:navigation] << {
       title: 'Component reference', href: '/components', children: []
     }
+  end
+
+  def build_pages_navigation
+    pages_path = File.join(opts[:root], 'views', 'pages')
+    pages = Dir.entries(pages_path)
+    pages = pages.select { |f| f =~ /^[^\.|\_].*$/ }
+    pages.each do |p|
+      settings = file_settings(File.join(pages_path, p))
+      path = '/' + p.gsub('.md', '').gsub('.slim', '')
+      opts[:navigation] << {
+        title: settings['title'], href: path, children: []
+      }
+    end
   end
 end
