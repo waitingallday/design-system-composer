@@ -93,6 +93,10 @@ module RodaRenderComponent
       front_matter(file).front_matter
     end
 
+    def file_settings_title(file)
+      file_settings(file)['title']
+    end
+
     def file_content(file)
       front_matter(file).content
     end

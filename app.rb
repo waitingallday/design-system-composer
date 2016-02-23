@@ -25,6 +25,8 @@ class App < Roda
     build_navigation
 
     r.root do
+      # Unset page title
+      opts[:pagetitle] = nil
       view('homepage')
     end
 
@@ -35,11 +37,13 @@ class App < Roda
           @title = File.basename(path).capitalize
           @component = path
           @documents = get_component(path, components: opts[:components_path])
+          opts[:pagetitle] = @title
           view('components/show')
         end
       end
 
       r.is do
+        opts[:pagetitle] = 'Components'
         view('components/index')
       end
     end
@@ -54,14 +58,17 @@ class App < Roda
           r.on 'source' do
             @file = path
             @source = convert_tags(slim(file_content(f)))
+            opts[:pagetitle] = "Source for #{@file}"
             view('layouts/source')
           end
 
+          opts[:pagetitle] = File.basename(path).capitalize
           view('layouts/' + path)
         end
       end
 
       r.is do
+        opts[:pagetitle] = 'Layouts'
         view('layouts/index')
       end
     end
@@ -71,11 +78,17 @@ class App < Roda
       basepath = File.join(opts[:root], 'views', 'pages', path)
       @content = ''
       if File.exist? basepath + '.md'
-        @content = markdown(file_content(basepath + '.md'))
+        @content = file_content(basepath + '.md')
+        opts[:pagetitle] = file_settings_title(basepath + '.md')
+        @content = markdown(@content)
       elsif File.exist? basepath + '.slim'
-        @content = slim(file_content(basepath + '.slim'))
+        @content = file_content(basepath + '.slim')
+        opts[:pagetitle] = file_settings_title(basepath + '.slim')
+        @content = slim(@content)
       elsif File.exist? basepath + '.slim.md'
-        @content = markdown(slim(file_content(basepath + '.slim.md')))
+        @content = file_content(basepath + '.slim.md')
+        opts[:pagetitle] = file_settings_title(basepath + '.slim.md')
+        @content = markdown(slim(@content))
       end
       view('pages/show') unless @content.empty?
     end
