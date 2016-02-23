@@ -19,6 +19,8 @@ class App < Roda
   opts[:components] = Dir.entries(opts[:components_path])
   opts[:components] = opts[:components].select { |f| f =~ /^[^\.|\_]*[^\.]$/ }
 
+  opts[:pages_path] = File.join(opts[:root], 'views', 'pages')
+
   route do |r|
     build_navigation
 
@@ -91,13 +93,15 @@ class App < Roda
   end
 
   def build_pages_navigation
-    pages_path = File.join(opts[:root], 'views', 'pages')
-    pages = Dir.entries(pages_path).select { |f| f =~ /^[^\.|\_|show].*$/ }
+    pages = Dir.entries(opts[:pages_path]).select do |f|
+      f =~ /^[^\.|\_|show].*$/
+    end
     pages.each { |p| add_page(p) }
   end
 
   def add_page(p)
-    settings = file_settings(File.join(pages_path, p))
+    settings = file_settings(File.join(opts[:pages_path], p))
+    return if settings['hidden']
     path = '/' + p.gsub('.md', '').gsub('.slim', '')
     opts[:navigation] << { title: settings['title'], href: path }
   end

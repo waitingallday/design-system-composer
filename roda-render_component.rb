@@ -35,31 +35,28 @@ module RodaRenderComponent
 
     private
 
+    # Render block through tilt template
     def slim(content, scope = self)
       Slim::Template.new(pretty: true) { content }.render(scope)
     end
 
+    # Render block through tilt template
     def markdown(content)
       Tilt::RedcarpetTemplate.new { content }.render
     end
 
+    # Render slim
     def build_slim(f)
-      if basename_without_index_and_extension(f)[-9..-1] == 'no-source'
-        source = ''
-      else
-        source = render_source_block(slim(file_content(f)))
-      end
+      source = basename_without_index_and_extension(f)[-9..-1] == 'no-source'
+      source = render_source_block(slim(file_content(f))) unless source
       output = slim(file_content(f))
 
       [title_from_filename(f), output, source]
     end
 
     def build_html(f)
-      if basename_without_index_and_extension(f)[-9..-1] == 'no-source'
-        source = ''
-      else
-        source = render_source_block(file_content(f))
-      end
+      source = basename_without_index_and_extension(f)[-9..-1] == 'no-source'
+      source = render_source_block(file_content(f)) unless source
       output = file_content(f)
 
       [title_from_filename(f), output, source]
@@ -69,6 +66,7 @@ module RodaRenderComponent
       markdown(file_content(f))
     end
 
+    # Predefined block for displaying example source
     def render_source_block(block)
       '
     <section class="code"><ul class="accordion">
@@ -82,6 +80,7 @@ module RodaRenderComponent
 '
     end
 
+    # Parse front matter and cache
     def front_matter(file)
       @front_matters ||= {}
       unless @front_matters.key? file
@@ -98,6 +97,7 @@ module RodaRenderComponent
       front_matter(file).content
     end
 
+    # Prep tag block for html display
     def convert_tags(block = '')
       block = yield if block_given?
       block.gsub('<', '&lt;').gsub('>', '&gt;')
