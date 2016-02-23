@@ -3,6 +3,7 @@ GEM
   specs:
     dotenv (2.1.0)
     front_matter_parser (0.0.4)
+    minitest (5.8.4)
     rack (1.6.4)
     redcarpet (3.3.4)
     roda (2.11.0)
@@ -19,6 +20,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv (~> 2.1.0)
   front_matter_parser (~> 0.0.2)
+  minitest (>= 5.7.0)
   redcarpet (~> 3.3.4)
   roda (~> 2.11.0)
   slim (~> 2.0.3)
