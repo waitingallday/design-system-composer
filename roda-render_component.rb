@@ -11,24 +11,25 @@ module RodaRenderComponent
         raw_documents << Dir.glob(parent)
       end
 
-      process_component(raw_documents)
+      raw_documents.flatten.sort.map { |f| get_section(f) }
 
       @documents
     end
 
-    def process_component(raw_documents)
-      raw_documents.flatten.sort.map do |f|
-        section = File.basename(f)[0..1]
-        @documents[section] = [] unless @documents[section]
-        @documents[section] <<
-          case File.extname(f)
-          when '.md' then
-            build_markdown(f) unless opts.include? :code_only
-          when '.slim' then
-            build_slim(f)
-          else
-            build_html(f)
-          end
+    def get_section(f)
+      section = File.basename(f)[0..1]
+      @documents[section] = [] unless @documents[section]
+      @documents[section] << process_section(f)
+    end
+
+    def process_section(f)
+      case File.extname(f)
+      when '.md' then
+        build_markdown(f) unless opts.include? :code_only
+      when '.slim' then
+        build_slim(f)
+      else
+        build_html(f)
       end
     end
 
