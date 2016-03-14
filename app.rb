@@ -51,7 +51,7 @@ class App < Roda
     # Complete layout, with source variant and index
     r.on 'layouts' do
       r.on :path do |path|
-        f = File.join(opts[:root], 'views', 'layouts', path + '.slim')
+        f = File.join(opts[:root], 'views', 'templates', path + '.slim')
         if File.exist? f
           @layout = true
 
@@ -59,17 +59,17 @@ class App < Roda
             @file = path
             @source = convert_tags(slim(file_content(f)))
             opts[:pagetitle] = "Source for #{@file}"
-            view('layouts/source')
+            view('templates/source')
           end
 
           opts[:pagetitle] = File.basename(path).capitalize
-          view('layouts/' + path)
+          view('templates/' + path)
         end
       end
 
       r.is do
         opts[:pagetitle] = 'Layouts'
-        view('layouts/index')
+        view('templates/index')
       end
     end
 
