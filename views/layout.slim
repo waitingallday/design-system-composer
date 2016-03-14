@@ -12,16 +12,16 @@ html.no-js lang="en"
     /[if lt IE 9]
       script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"
 
-    - if ENV['MODE'] == 'dev'
+    - if ENV['MODE'] == 'prod'
+      link rel="stylesheet" href="//d2h9b02ioca40d.cloudfront.net/#{ENV['VERSION']}/uom.css"
+      script src="//d2h9b02ioca40d.cloudfront.net/#{ENV['VERSION']}/uom.js"
+    - else
       script src="/assets/injection.js"
       link rel="stylesheet" href="/assets/injection.css"
       script src="/assets/components.js"
       link rel="stylesheet" href="/assets/components.css"
       link rel="stylesheet" href="/assets/docs.css"
       script src="http://#{ENV['WEB_SERVER_HOST']}:#{ENV['WEBPACK_SERVER_PORT']}/webpack-dev-server.js"
-    - else
-      link rel="stylesheet" href="//d2h9b02ioca40d.cloudfront.net/v3.8.1/uom.css"
-      script src="//d2h9b02ioca40d.cloudfront.net/v3.8.1/uom.js"
 
     link rel="stylesheet" href="/assets/highlight.css"
     script src="/assets/highlight.pack.js"
