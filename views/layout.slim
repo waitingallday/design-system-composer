@@ -23,10 +23,16 @@ html.no-js lang="en"
       link rel="stylesheet" href="/assets/docs.css"
       script src="http://#{ENV['WEB_SERVER_HOST']}:#{ENV['WEBPACK_SERVER_PORT']}/webpack-dev-server.js"
 
-    link rel="stylesheet" href="/assets/highlight.css"
-    script src="/assets/highlight.pack.js"
+    - if ENV['OLD']
+      link rel="stylesheet" href="/assets/lib/highlight.css"
+      script src="/assets/lib/highlight.pack.js"
+    - else
+      link rel="stylesheet" href="/assets/lib/ace.extra.css"
 
-  body
+    link rel="stylesheet" href="/assets/lib/verselect.css"
+    script src="/assets/lib/verselect.js"
+
+  body data-version=(ENV['VERSION'])
     .uomcontent
       .page-inner
         == yield

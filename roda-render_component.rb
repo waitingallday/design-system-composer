@@ -4,6 +4,7 @@ module RodaRenderComponent
   module InstanceMethods
     def get_component(path, opts = {})
       @documents = {}
+      @code_i = 0
 
       raw_documents = []
       %w(md html slim).each do |ext|
@@ -68,15 +69,22 @@ module RodaRenderComponent
 
     # Predefined block for displaying example source
     def render_source_block(block)
+      @code_i += 1
       '
-    <section class="code"><ul class="accordion">
-      <li>
-        <span class="accordion__title">Sample Markup</span>
-        <div class="accordion__hidden"><pre><code class="html">
+    <section class="code">
+      <pre class="html" id="t' + @code_i.to_s + '">
 ' + convert_tags(block) + '
-        </code></pre></div>
-      </li>
-    </ul></section>
+      </pre>
+
+      <script src="/assets/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+      <script>
+          var editor = ace.edit("t' + @code_i.to_s + '");
+          editor.setTheme("ace/theme/github");
+          editor.session.setMode("ace/mode/html");
+          editor.getSession().setTabSize(4);
+          editor.getSession().setUseSoftTabs(true);
+      </script>
+    </section>
 '
     end
 
