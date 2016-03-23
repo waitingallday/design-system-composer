@@ -83,7 +83,7 @@ module RodaRenderComponent
 
     def trigger_source_editable
       buf = '
-      <script src="/assets/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
 '
       @code_i.times do |i|
         l = (1 + i).to_s
