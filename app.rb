@@ -7,12 +7,13 @@ Roda.plugin RodaRenderComponent
 #
 class App < Roda
   use Rack::Session::Cookie, secret: ENV['SECRET']
+  opts[:root] = File.join(File.dirname(__FILE__))
+
   plugin :static, ['/assets']
   plugin :render, engine: 'slim'
 
   opts[:version] = ENV['VERSION']
 
-  opts[:root] = File.join(File.dirname(__FILE__))
   opts[:components_path] = File.join(
     opts[:root], 'assets', 'targets', 'components'
   )

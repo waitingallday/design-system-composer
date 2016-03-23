@@ -1,0 +1,14 @@
+{
+  "name": "design-system-composer",
+  "description": "",
+  "version": "0.0.1",
+  "repository": "waitingallday/design-system-composer",
+  "author": "University of Melbourne",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "codemirror": "~5.12.0"
+  },
+  "engines": {
+    "node": "~4.2.1"
+  }
+}

@@ -4,6 +4,7 @@ module RodaRenderComponent
   module InstanceMethods
     def get_component(path, opts = {})
       @documents = {}
+      @code_i = 0
 
       raw_documents = []
       %w(md html slim).each do |ext|
@@ -12,6 +13,8 @@ module RodaRenderComponent
       end
 
       raw_documents.flatten.sort.map { |f| get_section(f) }
+
+      @documents['_append'] = [trigger_source_editable] if @code_i > 0
 
       @documents
     end
@@ -48,16 +51,16 @@ module RodaRenderComponent
     # Render slim
     def build_slim(f)
       source = basename_without_index_and_extension(f)[-9..-1] == 'no-source'
-      source = render_source_block(slim(file_content(f))) unless source
-      output = slim(file_content(f))
+      source = (source ? nil : render_source_block(slim(file_content(f))))
+      output = '<div id="r' + @code_i.to_s + '">' + slim(file_content(f)) + '</div>'
 
       [title_from_filename(f), output, source]
     end
 
     def build_html(f)
       source = basename_without_index_and_extension(f)[-9..-1] == 'no-source'
-      source = render_source_block(file_content(f)) unless source
-      output = file_content(f)
+      source = (source ? nil : render_source_block(file_content(f)))
+      output = '<div id="r' + @code_i.to_s + '">' + file_content(f) + '</div>'
 
       [title_from_filename(f), output, source]
     end
@@ -68,16 +71,38 @@ module RodaRenderComponent
 
     # Predefined block for displaying example source
     def render_source_block(block)
+      @code_i += 1
       '
-    <section class="code"><ul class="accordion">
-      <li>
-        <span class="accordion__title">Sample Markup</span>
-        <div class="accordion__hidden"><pre><code class="html">
+    <section class="code">
+      <pre class="html" id="s' + @code_i.to_s + '">
 ' + convert_tags(block) + '
-        </code></pre></div>
-      </li>
-    </ul></section>
+      </pre>
+    </section>
 '
+    end
+
+    def trigger_source_editable
+      buf = '
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
+'
+      @code_i.times do |i|
+        l = (1 + i).to_s
+        buf += '
+      <script>
+        var e' + l + ' = ace.edit("s' + l + '");
+        e' + l + '.setTheme("ace/theme/github");
+        e' + l + '.session.setMode("ace/mode/html");
+        e' + l + '.getSession().setTabSize(2);
+        e' + l + '.getSession().setUseSoftTabs(true);
+        e' + l + '.getSession().on("change", function(e){
+          document.getElementById("r' + l + '").innerHTML = e' + l + '.getValue();
+          UOMloadComponents();
+        });
+      </script>
+'
+      end
+
+      buf
     end
 
     # Parse front matter and cache
