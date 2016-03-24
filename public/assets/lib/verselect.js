@@ -3,13 +3,11 @@
     "use strict";
 
     var versions = [
-      'v3.8.1',
-      'v3.8'
+      'v4.0'
     ];
 
     var supported = [
-      'v3.8.1',
-      'v3.8'
+      'v4.0'
     ];
 
     var toolbar = document.querySelector('#version-toolbar');
@@ -23,7 +21,7 @@
         var li = document.createElement('li');
         var v = versions[i];
         if (v===current)
-          li.addClass('selected');
+          li.classList.add('selected');
 
         var isSupported = 0;
         for (var j in supported)
@@ -33,7 +31,7 @@
         if (isSupported===0) {
           li.innerHTML = v;
         } else {
-          li.addClass('supported');
+          li.classList.add('supported');
           li.innerHTML = '<a href="/'+v+window.location.pathname+'">'+v+'</a>';
         }
 
