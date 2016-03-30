@@ -50,6 +50,8 @@ module RodaRenderComponent
 
     # Render slim
     def build_slim(f)
+      @code_i += 1
+
       source = basename_without_index_and_extension(f)[-9..-1] == 'no-source'
       source = (source ? nil : render_source_block(slim(file_content(f))))
       output = '<div id="r' + @code_i.to_s + '">' + slim(file_content(f)) + '</div>'
@@ -58,6 +60,8 @@ module RodaRenderComponent
     end
 
     def build_html(f)
+      @code_i += 1
+
       source = basename_without_index_and_extension(f)[-9..-1] == 'no-source'
       source = (source ? nil : render_source_block(file_content(f)))
       output = '<div id="r' + @code_i.to_s + '">' + file_content(f) + '</div>'
@@ -71,7 +75,6 @@ module RodaRenderComponent
 
     # Predefined block for displaying example source
     def render_source_block(block)
-      @code_i += 1
       '
     <section class="code">
       <pre class="html" id="s' + @code_i.to_s + '">
