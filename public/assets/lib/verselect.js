@@ -32,7 +32,7 @@
           li.innerHTML = v;
         } else {
           li.classList.add('supported');
-          li.innerHTML = '<a href="/'+v+window.location.pathname+'">'+v+'</a>';
+          li.innerHTML = '<a href="'+window.location.pathname+'">'+v+'</a>';
         }
 
         nav.appendChild(li);
