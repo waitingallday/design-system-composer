@@ -1,1 +1,1 @@
-web: MODE=prod rackup -p $PORT
+web: MODE=prod unicorn -p $PORT

@@ -47,6 +47,11 @@ class App < Roda
         opts[:pagetitle] = 'Components'
         view('components/index')
       end
+
+      r.root do
+        opts[:pagetitle] = 'Components'
+        view('components/index')
+      end
     end
 
     # Complete layout, with source variant and index
@@ -72,10 +77,16 @@ class App < Roda
         opts[:pagetitle] = 'Layouts'
         view('templates/index')
       end
+
+      r.root do
+        opts[:pagetitle] = 'Layouts'
+        view('templates/index')
+      end
     end
 
     # Content page
-    r.is :path do |path|
+    r.on :path do |path|
+      path = path.chop if path[-1] == '/'
       basepath = File.join(opts[:root], 'views', 'pages', path)
       @content = ''
       if File.exist? basepath + '.md'
