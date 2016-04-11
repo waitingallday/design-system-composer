@@ -1,15 +1,17 @@
-== slim :breadcrumb
+== render(:_breadcrumb)
 
 div role="main"
   header
-    form.search action="http://search-au.funnelback.com/s/search.html" method="get"
+    form action="http://search-au.funnelback.com/s/search.html" class="search" method="get"
       fieldset
-        .inline
-          input type="hidden" name="collection" value="unimelb-researchers"
-          input data-required="" placeholder="Search" name="query" type="search" title="Please enter a keyword" aria-label="Search" value="scince" autocomplete="off"
-          button type="submit" value="Go" class="search-button"
-            svg class="icon" role="img"
-              use xlink:href="#icon-search"
+        input name="collection" type="hidden" value="unimelb-researchers"
+          div class="inline attached"
+            span class="fill"
+              input aria-label="Search" aria-required="true" autocomplete="off" data-error="Please enter a keyword" name="query" placeholder="Search" type="search"
+            span
+              button class="inline-button" type="submit"
+                span class="small icon--hide-label" data-icon="search" Go
+
   .flash.flash--info.flash--center
     p <strong>Success!</strong> This is an example of a flash message.
   .with-aside
@@ -40,7 +42,7 @@ div role="main"
                 | Bachelor of Science students complete a breadth component of 50 points (four subjects), with another 25 points (two subjects) of free (that is, breadth or core) ...
               p.url: a href="http://breadth.unimelb.edu.au/breadth/info/Science.html" staff.unimelb.edu.au/__data/assets/pdf_file/0020/910604/TEE_Example_ISIS_AdHoc_Analysis.pdf
             li
-              img src="/assets/news/tsinghua_university.jpg" alt="Tsinghua University"
+              img src="/assets/example/tsinghua_university.jpg" alt="Tsinghua University"
               h3: a href="#" School of Social and Political Sciences | Political Science
               p Political science explores the main issues, ideas, institutions and actors that dominate local, national and international politics. It focuses on how people engage ...
               p.url: a href="http://ssps.unimelb.edu.au/study-areas/political-science" ssps.unimelb.edu.au/study-areas/political-science
