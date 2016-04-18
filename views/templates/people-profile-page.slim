@@ -2,15 +2,15 @@
 
 div role="main"
   header
-    form.search action="http://search-au.funnelback.com/s/search.html" method="get"
+    form action="http://search-au.funnelback.com/s/search.html" class="search" method="get"
       fieldset
-        .inline
-          input type="hidden" name="collection" value="unimelb-researchers"
-          input aria-required="true" placeholder="Search" name="query" type="search" data-error="Please enter a keyword" aria-label="Search" autocomplete="off"
-          button type="submit" class="search-button"
-            span Go
-            svg class="icon" role="img"
-              use xlink:href="#icon-search"
+        input name="collection" type="hidden" value="unimelb-researchers"
+          div class="inline attached"
+            span class="fill"
+              input aria-label="Search" aria-required="true" autocomplete="off" data-error="Please enter a keyword" name="query" placeholder="Search" type="search"
+            span
+              button class="inline-button" type="submit"
+                span class="small icon--hide-label" data-icon="search" Go
 
   .profile-header
     .profile-header__summary
