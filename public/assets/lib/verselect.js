@@ -3,11 +3,11 @@
     "use strict";
 
     var versions = [
-      'v4.1'
+      'v4.1.1'
     ];
 
     var supported = [
-      'v4.1'
+      'v4.1.1'
     ];
 
     var toolbar = document.querySelector('#version-toolbar');
