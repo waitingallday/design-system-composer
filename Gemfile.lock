@@ -7,7 +7,7 @@ GEM
     front_matter_parser (0.0.4)
     minitest (5.8.4)
     rack (2.2.3)
-    redcarpet (3.3.4)
+    redcarpet (3.5.1)
     roda (2.11.0)
       rack
     slim (2.0.3)
@@ -25,7 +25,7 @@ DEPENDENCIES
   foreman (~> 0.78.0)
   front_matter_parser (~> 0.0.2)
   minitest (>= 5.7.0)
-  redcarpet (~> 3.3.4)
+  redcarpet (~> 3.5.1)
   roda (~> 2.11.0)
   slim (~> 2.0.3)
 
